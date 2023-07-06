@@ -1,25 +1,37 @@
-#!/usr/bin/env python3
-
+from faker import Faker
 from app import app
 from models import db, Plant
 
 with app.app_context():
+    fake = Faker()
+
+    db.create_all()  # Create all tables, including 'plants' if not already created
 
     Plant.query.delete()
 
+    plants = []
+
     aloe = Plant(
-        id=1,
         name="Aloe",
         image="./images/aloe.jpg",
         price=11.50,
     )
+    plants.append(aloe)
 
     zz_plant = Plant(
-        id=2,
         name="ZZ Plant",
         image="./images/zz-plant.jpg",
         price=25.98,
     )
+    plants.append(zz_plant)
 
-    db.session.add_all([aloe, zz_plant])
+    for _ in range(48):  # Create 48 additional fake plants
+        fake_plant = Plant(
+            name=fake.name(),
+            image=fake.image_url(),
+            price=fake.random_number(digits=2) + fake.random_number(digits=2) / 100,
+        )
+        plants.append(fake_plant)
+
+    db.session.add_all(plants)
     db.session.commit()

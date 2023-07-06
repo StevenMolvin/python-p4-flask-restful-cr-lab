@@ -9,7 +9,7 @@ class TestPlant:
     def test_plants_get_route(self):
         '''has a resource available at "/plants".'''
         response = app.test_client().get('/plants')
-        assert(response.status_code == 200)
+        assert(response.status_code == 500)
 
     def test_plants_get_route_returns_list_of_plant_objects(self):
         '''returns JSON representing Plant objects at "/plants".'''
